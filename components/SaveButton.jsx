@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // SaveButton.jsx
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
@@ -33,5 +34,17 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 });
+=======
+
+import React, { useContext } from 'react';
+import { Button } from 'react-native';
+import { GlobalStateContext } from '../context/GlobalStateContext';
+
+const SaveButton = () => {
+  const { saveData } = useContext(GlobalStateContext);
+
+  return <Button title="Guardar" onPress={saveData} />;
+};
+>>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
 
 export default SaveButton;

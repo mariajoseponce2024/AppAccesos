@@ -16,6 +16,27 @@ const login = async () => {
   }
 };
 
+<<<<<<< HEAD
+=======
+const handleLogin = async () => {
+  try {
+    const response = await post('/', {
+      email: email,
+      password: password,
+    });
+
+    const token = response.data.token;
+
+    await login(token); 
+
+  } catch (error) {
+    console.log(error)
+    Alert.alert("Error de inicio de sesión", "Las credenciales son incorrectas")
+  }
+};
+
+
+>>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
 
   return (
     <View style={styles.container}>
@@ -35,7 +56,13 @@ const login = async () => {
         style={styles.input}
         secureTextEntry
       />
+<<<<<<< HEAD
       <Pressable onPress={login} style={styles.button} />
+=======
+      <Pressable onPress={login} style={styles.button}>
+       <Text>Presiona aquí</Text>
+      </Pressable>
+>>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
     </View>
   );
 }

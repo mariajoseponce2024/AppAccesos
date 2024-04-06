@@ -1,7 +1,12 @@
+<<<<<<< HEAD
+=======
+// GlobalStateContext.js
+>>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
 import React, { createContext, useState } from 'react';
 
 export const GlobalStateContext = createContext({});
 
+<<<<<<< HEAD
 
 //estdos iniciales
 export const GlobalStateProvider = ({ children }) => {
@@ -11,12 +16,20 @@ export const GlobalStateProvider = ({ children }) => {
     vehicleQRChecked: false,
     personalQR: '',
     personalQRChecked: false,
+=======
+export const GlobalStateProvider = ({ children }) => {
+  const [globalState, setGlobalState] = useState({
+    entrance: true,
+    vehicleQR: '',
+    personalQR: '',
+>>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
     neumaticos: false,
     matafuego: false,
     remito: {
       checked: false,
       number: '',
       imageUri: ''
+<<<<<<< HEAD
     },
     incident: {
       imageUri: '',
@@ -156,3 +169,21 @@ export const GlobalStateProvider = ({ children }) => {
     </GlobalStateContext.Provider>
   );
 };
+=======
+    }
+    
+  });
+
+  const saveData = () => {
+    // Aquí manejas la lógica para guardar los datos, por ejemplo, enviarlos a una API
+    console.log('Datos a guardar:', globalState);
+    // axios.post('tuAPI', globalState)...
+  };
+
+  return (
+    <GlobalStateContext.Provider value={{ globalState, setGlobalState, saveData }}>
+      {children}
+    </GlobalStateContext.Provider>
+  );
+};
+>>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
