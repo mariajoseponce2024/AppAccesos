@@ -1,100 +1,16 @@
-<<<<<<< HEAD
-import React from 'react';
-import { View, Text, Button, StyleSheet, Image } from 'react-native';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { GlobalStateContext } from '../context/GlobalStateContext';
-import CheckBox from '@react-native-community/checkbox'; 
-
-class PersonalQRScanner extends React.Component {
-  static contextType = GlobalStateContext; 
-
-  pickImage = () => {
-    launchImageLibrary({
-      mediaType: 'photo',
-      quality: 1,
-    }, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        this.updateImageState(response.assets[0].uri);
-      }
-    });
-  };
-
-  takeImage = () => {
-    launchCamera({
-      mediaType: 'photo',
-      cameraType: 'back',
-      quality: 1,
-    }, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        this.updateImageState(response.assets[0].uri);
-      }
-    });
-  };
-
-  updateImageState = (uri) => {
-    this.context.setGlobalState(prevState => ({
-      ...prevState,
-      personalQR: uri,
-      personalQRChecked: true, 
-    }));
-  };
-
-  render() {
-
-    const { personalQR, personalQRChecked, togglePersonalQRChecked, clearPersonalQR } = this.context;
-
-    return (
-      <View style={styles.container}>
-        <View style={styles.row}>
-        <Text>Scanner Personal</Text>
-        <CheckBox
-            value={personalQRChecked}
-            onValueChange={togglePersonalQRChecked}
-            disabled={true} // Hace el checkbox solo de lectura
-          />
-        </View>
-
-        <View style={styles.row}>
-        <Button title="Agregar Imagen" onPress={this.pickImage} />
-<Button title="Tomar Foto" onPress={this.takeImage} />
-      </View>
-
-        {personalQR && (
-          <View style={styles.imageContainer}>
-            <Image source={{ uri: personalQR }} style={styles.image} />
-            <Button title="Quitar Imagen" onPress={clearPersonalQR} />
-          </View>
-        )}
-      </View>
-    );
-  }
-}
-=======
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
+import { GlobalStateContext } from '../context/GlobalStateContext';
 
 const PersonalQRScanner = () => {
-  const [isChecked, setIsChecked] = useState(false);
   const [image, setImage] = useState(null);
+  const { personalQR, setGlobalState, personalQRChecked, togglePersonalQRChecked } = useContext(GlobalStateContext);
 
   const handleImageSelection = async (type) => {
     let result;
     if (type === 'library') {
-      const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need media library permissions to make this work!');
-        return;
-      }
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -102,11 +18,6 @@ const PersonalQRScanner = () => {
         quality: 1,
       });
     } else if (type === 'camera') {
-      const { status } = await ImagePicker.getCameraPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need camera permissions to make this work!');
-        return;
-      }
       result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         aspect: [4, 3],
@@ -116,7 +27,11 @@ const PersonalQRScanner = () => {
 
     if (!result.cancelled) {
       setImage(result.uri);
-      setIsChecked(true);
+      setGlobalState(prevState => ({
+        ...prevState,
+        personalQR: result.uri,
+        personalQRChecked: true,
+      }));
     }
   };
 
@@ -125,10 +40,8 @@ const PersonalQRScanner = () => {
       <View style={styles.row}>
         <Text>Scanner QR Personal</Text>
         <CheckBox
-          center
-          title=""
-          checked={isChecked}
-          onPress={() => setIsChecked(!isChecked)}
+          checked={personalQRChecked}
+          onPress={togglePersonalQRChecked}
           containerStyle={styles.checkbox}
         />
       </View>
@@ -138,17 +51,14 @@ const PersonalQRScanner = () => {
         <Button title="Tomar Foto" onPress={() => handleImageSelection('camera')} />
       </View>
 
-    
       {image && (
-    <View style={styles.imageContainer}>
-      <Image source={{ uri: image }} style={styles.image} />
-    </View>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.image} />
+        </View>
       )}
-  </View>
-    
+    </View>
   );
 };
->>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
 
 const styles = StyleSheet.create({
   container: {
@@ -161,11 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-<<<<<<< HEAD
     width: '100%',
-=======
-    width: '100%', // Asegura que los elementos hijos (botones y checkbox) se distribuyan a lo largo del ancho del contenedor
->>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
     marginBottom: 20,
   },
   image: {
@@ -173,16 +79,10 @@ const styles = StyleSheet.create({
     height: 100,
     marginVertical: 10,
   },
-<<<<<<< HEAD
-});
-
-export default PersonalQRScanner;
-=======
   checkbox: {
     marginVertical: 10,
-    marginLeft: 10, // Añade un poco de margen para separar el texto del checkbox
+    marginLeft: 10,
   },
 });
 
 export default PersonalQRScanner;
->>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
