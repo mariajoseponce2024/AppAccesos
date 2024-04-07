@@ -1,42 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Alert } from 'react-native';
-import { useAuth, AuthProvider } from '../context/AuthContext';
-
+import { useAuth } from '../context/AuthContext';
 
 function LoginScreen() {
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const { onLogin } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { onLogin } = useAuth();
 
-
-const login = async () => {
-  const result = await onLogin(email, password);
-  if (result && result.error) {
-    Alert.alert(result.msg);
-  }
-};
-
-<<<<<<< HEAD
-=======
-const handleLogin = async () => {
-  try {
-    const response = await post('/', {
-      email: email,
-      password: password,
-    });
-
-    const token = response.data.token;
-
-    await login(token); 
-
-  } catch (error) {
-    console.log(error)
-    Alert.alert("Error de inicio de sesión", "Las credenciales son incorrectas")
-  }
-};
-
-
->>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
+  const handleLogin = async () => {
+    try {
+      const result = await onLogin(email, password);
+      if (result.error) {
+        // Asume que result tiene una propiedad 'error' y 'msg' cuando hay un error
+        Alert.alert("Error de inicio de sesión", result.msg);
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error de inicio de sesión", "Ha ocurrido un problema al intentar iniciar sesión.");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -46,7 +28,7 @@ const handleLogin = async () => {
         value={email}
         onChangeText={setEmail}
         style={styles.input}
-        keyboardType="email-address" 
+        keyboardType="email-address"
         autoCapitalize="none"
       />
       <TextInput
@@ -56,13 +38,9 @@ const handleLogin = async () => {
         style={styles.input}
         secureTextEntry
       />
-<<<<<<< HEAD
-      <Pressable onPress={login} style={styles.button} />
-=======
-      <Pressable onPress={login} style={styles.button}>
-       <Text>Presiona aquí</Text>
+      <Pressable onPress={handleLogin} style={styles.button}>
+        <Text style={styles.buttonText}>Iniciar sesión</Text>
       </Pressable>
->>>>>>> cb4f0b4f7e2dab65325df574762a4668ec9e8043
     </View>
   );
 }
@@ -77,11 +55,15 @@ const styles = StyleSheet.create({
     height: 40,
     borderBottomWidth: 1,
     marginBottom: 20,
+    width: '80%',
   },
   button: {
     padding: 10,
     backgroundColor: '#007bff',
     alignItems: 'center',
+  },
+  buttonText: {
+    color: '#ffffff',
   },
 });
 
